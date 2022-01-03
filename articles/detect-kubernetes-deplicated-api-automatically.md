@@ -40,7 +40,7 @@ PlutoというOSSを使い、CIで1つのjobを作成するのみ。
 静的manifestやHelm chart、Cluster内で動作しているHelm application内のdeplicated apiを検知することができるOSSです。
 
 
-Plutoをローカルで試す。
+### 実際にPlutoをローカルで試します
 
 #### Plutoのインストール方法
 
