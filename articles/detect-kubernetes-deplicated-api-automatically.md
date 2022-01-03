@@ -58,7 +58,7 @@ $ vi values.yaml
 # ingress.enabledを `false` -> `true`に変更
 ```
 
-* deplicated apiではない、apiVersionのmanifestを検証
+* deplicated apiを使っていないhelm chartを検証
 
 ```bash
 # template/ingress.yamlを変更
@@ -85,7 +85,7 @@ There were no resources found with known deprecated apiVersions.
 
 上記の結果から、対象のhelm chartでdeplicated apiを使っていないことがわかります。
 
-* deplicated apiのapiVersionのmanifestを検証
+* deplicated apiを使っているhelm chartを検証
 
 ```bash
 # template/ingress.yamlを変更
