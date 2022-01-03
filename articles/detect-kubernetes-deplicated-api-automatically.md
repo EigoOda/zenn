@@ -29,9 +29,6 @@ PlutoというOSSを使い、CIで1つのjobを作成するのみ。
 
 今回は、静的なHelm chart内で特定のKubernetes versionのdeplicated apiが使われていないか検出します。
 
-※ 本記事では、deplicated apiが検知されたときにSlackへ通知するなどは行っておりませんので
-  検知する方法としては、CIがコケていた場合です。
-
 
 ### Plutoとは？
 
@@ -41,6 +38,9 @@ PlutoというOSSを使い、CIで1つのjobを作成するのみ。
 > Live Helm releases: Pluto can check both Helm 2 and Helm 3 releases running in your cluster for deprecated apiVersions
 
 静的manifestやHelm chart、Cluster内で動作しているHelm application内のdeplicated apiを検知することができるOSSです。
+
+
+Plutoをローカルで試す。
 
 #### Plutoのインストール方法
 
@@ -62,7 +62,7 @@ $ vi values.yaml
 
 ```bash
 # template/ingress.yamlを変更
-$ template/ingress.yaml
+$ vi template/ingress.yaml
 --- 9 ~ 15行目
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
@@ -81,15 +81,15 @@ apiVersion: networking.k8s.io/v1
 # Cluster version 1.22.0を想定し、pluto コマンドでHelm chartを検証
 $ helm template . | pluto detect --target-versions version=v1.22.0 -
 There were no resources found with known deprecated apiVersions.
-↑
-対象のhelm chartでdeplicated apiを使っていない
 ```
+
+上記の結果から、対象のhelm chartでdeplicated apiを使っていないことがわかります。
 
 * deplicated apiのapiVersionのmanifestを検証
 
 ```bash
 # template/ingress.yamlを変更
-$ template/ingress.yaml
+$ vi template/ingress.yaml
 ---
 apiVersion: networking.k8s.io/v1
 ---
@@ -102,9 +102,45 @@ apiVersion: networking.k8s.io/v1beta1
 $ helm template . | pluto detect --target-versions version=v1.22.0 -
 NAME                        KIND      VERSION                     REPLACEMENT            REMOVED   DEPRECATED
 RELEASE-NAME-pluto-sample   Ingress   networking.k8s.io/v1beta1   networking.k8s.io/v1   true      true
-↑
-対象のhelm chartでdeplicated apiを使っている
 ```
+
+上記の結果から、対象のhelm chartでdeplicated apiが使われていることがわかります。
+
 
 ## 実装方法
 
+#### Gitlab CIの場合
+
+QuickStartで実行したコマンドをCIで実行するだけです。とても簡単です。
+
+#### Github Actionの場合
+
+専用のActionsが用意されているのでこちらもとても簡単ですね。
+[こちら](https://github.com/FairwindsOps/pluto#github-action-usage)に用意されています。
+
+
+## 番外編
+
+### outputを変更する方法
+
+* markdown形式でoutputする
+
+```bash
+$ helm template . | pluto detect --target-versions version=v1.22.0 --output markdown -
+|           NAME            | NAMESPACE |  KIND   |          VERSION          |     REPLACEMENT      | DEPRECATED | DEPRECATED IN | REMOVED | REMOVED IN |
+|---------------------------|-----------|---------|---------------------------|----------------------|------------|---------------|---------|------------|
+| RELEASE-NAME-pluto-sample | <UNKNOWN> | Ingress | networking.k8s.io/v1beta1 | networking.k8s.io/v1 | true       | v1.19.0       | true    | v1.22.0    |
+```
+
+### manifestやdeployされているhelmに対して実行する方法を紹介する
+
+Quickstartにも書かれていますが、実行するフラグによって何を検証するか変えられます
+
+* manifestを検証する場合
+`pluto detect-files`
+
+* Clusterにデプロイされているhelmを検証する場合
+`pluto detect-helm`
+
+* 静的helm chartを検証する場合
+`pluto detect`
