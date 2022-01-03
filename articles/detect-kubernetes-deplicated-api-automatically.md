@@ -3,7 +3,7 @@ title: "Kubernetesの非推奨(deplicated api)を自動検出する"
 emoji: "🙌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "pluto", "OSS"]
-published: false
+published: true
 ---
 
 あけましておめでとうございます。
