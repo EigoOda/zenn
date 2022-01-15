@@ -9,7 +9,7 @@ published: true
 最近、Secretの作成や値の確認(decode)を繰り返していて、作成したSecretの値を確認するために
 `kubectl get secret test-secret -ojsonpath='{.data.hogehoge} |base64 -d`をするのがめんどくさくなってしまったので、GoでCLIを作成してみました。
 
-Goは初心者でこれが最初のGo CLIなので、全然完成度は高くないですが、
+Goに関しては全くの初心者でこれが最初のGo CLIなので、testがなかったり、お作法がなってなかったりし、全然完成度は高くないですが、
 Goを勉強している方やSecretの値取得のために長いコマンド打つのがめんどくさくなってしまった方の助けになれれば嬉しいです。
 
 
