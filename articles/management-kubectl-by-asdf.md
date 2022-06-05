@@ -27,9 +27,9 @@ kube-apiserver の1つ以内のバージョン(古い、または新しいもの
 
 # 前提
 
-- OSは、macOS を利用
+- OSは、macOS を利用しています
 - asdf で kubectl を管理していること
-  - Homebrew などで kubectl をインストールしている場合は、asdf でインストールした kubectl を利用するように設定するひつようがあります
+  - Homebrew などで kubectl をインストールしている場合は、asdf でインストールした kubectl を利用するように設定する必要があります。
 
 
 # 実装内容
@@ -111,11 +111,11 @@ main() {
 main "$@"
 ```
 
-本件とは、関係なく不要な行もあるので、簡単に実装内容を説明します。
+本記事とは、関係なく不要な行もあるので、簡単に実装内容を説明します。
 
 main function に処理を記述しているため、そちらを見ていきます。
 
-- add_plugin
+### add_plugin
 
 ここではまず、asdf に kubectl plugin があるか確認し、ない場合は、追加しています。
 
@@ -134,7 +134,7 @@ add_plugin() {
 ```
 
 
-- install_plugin
+### install_plugin
 
 すでに kubectl plugin の何かしらのバージョンが入っていたほうが都合がいいので
 どのバージョンもインストールされていない場合、最新のバージョンをインストールしています。
@@ -150,7 +150,7 @@ install_plugin() {
 ```
 
 
-- main処理
+### main処理
 
 サーバ(Kubernetes cluster)とクライアント(kubectl)のバージョンを取得しています。
 ※ 確か、先頭のvがついたままだとバージョン比較が正しく動作しなかったため、sed/gsed で切り取っています。
@@ -193,4 +193,5 @@ function ktx() {
 kubectl ctx(krew plugin) でクラスタ切り替え後、Shell script を実行
 
 
+今の構成に不満はありませんが、もっと簡単にできるものがあれば、是非教えて下さい！！！
 以上です。
