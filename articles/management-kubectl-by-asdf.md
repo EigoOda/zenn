@@ -1,5 +1,5 @@
 ---
-title: "kubectlをサーババージョンに合わせて自動切り替え" 
+title: "kubectlをサーバのバージョンに合わせて自動切り替え"
 emoji: "🙌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "asdf", "cli", "shellscript"]
