@@ -3,7 +3,7 @@ title: "KubernetesのSecretに格納された値を簡単に取り出す"
 emoji: "🙌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "Go"]
-published: true
+published: false
 ---
 
 インフラからSREに転職しまして、現在、AWS/Kubernetes/Istio を触っているわけですが、
