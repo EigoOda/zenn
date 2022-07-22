@@ -28,14 +28,14 @@ https://newreleases.io/
 
 少しだけ各ポイントの説明します。
 
-1. 複数のプロバイダー(GitHub,GitLab,Docker Hubなど23つ)から、選べるので、基本的にトラックできる
+### 1. 複数のプロバイダー(GitHub,GitLab,Docker Hubなど23つ)から、選べるので、基本的にトラックできる
 
 GitHub で管理されているものは、`owner/project`を登録するだけ
 Docker Hubで管理されているものは、`image name`を登録するだけ
 Ruby Gemsで管理されているものは、`gem name`を登録するだけで、新しいリリースが出るたびに通知を受け取ることができます。
 
 
-2. GitHub アカウントでログインすると、Starをつけたrepositoryは1クリックで登録できる
+### 2. GitHub アカウントでログインすると、Starをつけたrepositoryは1クリックで登録できる
 
 GitHubアカウントがStarをつけたrepositoryは
 `import from`というセクションに表示され、1クリックで通知を設定することができます。
@@ -45,7 +45,7 @@ GitHubアカウントがStarをつけたrepositoryは
 Goのpackageの場合は、go.mod をアップロードするだけで、対象のpackageを登録することもできそうです。
 
 
-3. Slack,Discord,WebHookなど通知方法を選べる(mailも選べます)
+### 3. Slack,Discord,WebHookなど通知方法を選べる(mailも選べます)
 
 ここが一番嬉しかったところですが、
 SlackやDiscordとの連携がとても簡単にでき、チャネルに通知することができました。
