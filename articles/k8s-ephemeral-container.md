@@ -13,7 +13,7 @@ Kubernetes Clusterはkindで構築したものを利用します。
 # [Ephemeral Container](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/)とは？
 
 Podをトラブルシューティングするための仕組みです。
-Ephemeral Containerを利用することで、`kubectl exec`できないPod(Container)を比較的用意にデバッグすることができます。
+Ephemeral Containerを利用することで、`kubectl exec`できないPod(Container)を比較的容易にデバッグすることができます。
 
 実際にやってみたいとおもいます。
 
