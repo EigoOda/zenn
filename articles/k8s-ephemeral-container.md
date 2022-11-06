@@ -13,14 +13,14 @@ Kubernetes Clusterはkindで構築したものを利用します。
 # [Ephemeral Container](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/)とは？
 
 Podをトラブルシューティングするための仕組みです。
-Ephemeral Containerを利用することで、`kubectl exec`できないPod(Container)に対してアクセスすることが可能になります。
+Ephemeral Containerを利用することで、`kubectl exec`できないPod(Container)を比較的用意にデバッグすることができます。
 
-実際に実行してみたいと思います。
+実際にやってみたいとおもいます。
 
 
 ## 試してみる
 
-[Debugging with an ephemeral debug container](https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container)を実施してみます。
+[Debugging with an ephemeral debug container](https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container)を実行します。
 
 Ephemeral Container を追加するPodを用意
 
@@ -101,5 +101,5 @@ PID   USER     TIME  COMMAND
 ```
 
 Ephemeral Containerを使って、既存Podのトラブルシューティングを行う方法を試してみました。
-普段は、shやbashがインストールされているContainer Imageを使うことが多いため、困ったことがありませんが、distrolessなどの必要な実行ファイルのみ含んだContainer Imageを利用している場合は、役立ちそうだなーと感じました。
+普段は、shやbashがインストールされているContainer Imageを使うことが多いため、困ったことはありませんが、distrolessなどの必要な実行ファイルのみ含んだContainer Imageを利用している場合は、役立ちそうだなーと感じました。
 
