@@ -3,7 +3,7 @@ title: "いまさらながらEphemeral Containerを触ってみた"
 emoji: "🥶"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "ephemeral-container", "debug"]
-published: false
+published: true
 ---
 
 Kubernetes 1.25でstableに昇格したEphemeral Containerを触ってみました。
