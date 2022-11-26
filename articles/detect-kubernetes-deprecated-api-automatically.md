@@ -1,5 +1,5 @@
 ---
-title: "Kubernetesの非推奨(deplicated api)を自動検出する"
+title: "Kubernetesの非推奨(deprecated api)を自動検出する"
 emoji: "🙌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "pluto", "OSS"]
@@ -11,15 +11,15 @@ published: true
 
 私の環境では、Kubernetesの環境はPRD/STG/DEVで3環境あり、Clusterのバージョンが異なっていることが多々あります。
 また、最近はアプリケーションを`Helm`から`Argo CD`に移管したため
-Deplicated apiの検出がChange logを見る以外では、なかなか把握しきれていなかったり、気づきにくい状態となっています。
+deprecated apiの検出がChange logを見る以外では、なかなか把握しきれていなかったり、気づきにくい状態となっています。
 
-以前は、`helm install/upgrade`の際、deplicated apiがterminalに表示されていたため、気づけていましたが、Argo CDによるGitOpsに移行したため
+以前は、`helm install/upgrade`の際、deprecated apiがterminalに表示されていたため、気づけていましたが、Argo CDによるGitOpsに移行したため
 気づくタイミングがとても少なくなってしまいました。
 
 そのため、CIに組み込み、自動で検知することにしました。
 
 実装する前に調査した際、あまりこういった記事がなかったため
-少しでも、Kubernetes deplicated apiを自動で検知する方法を探している方の参考になれば、幸いです。
+少しでも、Kubernetes deprecated apiを自動で検知する方法を探している方の参考になれば、幸いです。
 
 
 ## 何をどうするか？
@@ -27,7 +27,7 @@ Deplicated apiの検出がChange logを見る以外では、なかなか把握�
 とっても簡単です。
 PlutoというOSSを使い、CIで1つのjobを作成するのみ。
 
-今回は、静的なHelm chart内で特定のKubernetes versionのdeplicated apiが使われていないか検出します。
+今回は、静的なHelm chart内で特定のKubernetes versionのdeprecated apiが使われていないか検出します。
 
 
 ### Plutoとは？
@@ -37,7 +37,7 @@ PlutoというOSSを使い、CIで1つのjobを作成するのみ。
 > Infrastructure-as-Code repos: Pluto can check both static manifests and Helm charts for deprecated apiVersions
 > Live Helm releases: Pluto can check both Helm 2 and Helm 3 releases running in your cluster for deprecated apiVersions
 
-静的manifestやHelm chart、Cluster内で動作しているHelm application内のdeplicated apiを検知することができるOSSです。
+静的manifestやHelm chart、Cluster内で動作しているHelm application内のdeprecated apiを検知することができるOSSです。
 
 
 ### 実際にPlutoをローカルで試します
@@ -58,7 +58,7 @@ $ vi values.yaml
 # ingress.enabledを `false` -> `true`に変更
 ```
 
-* deplicated apiを使っていないhelm chartを検証
+* deprecated apiを使っていないhelm chartを検証
 
 ```bash
 # template/ingress.yamlを変更
@@ -83,9 +83,9 @@ $ helm template . | pluto detect --target-versions version=v1.22.0 -
 There were no resources found with known deprecated apiVersions.
 ```
 
-上記の結果から、対象のhelm chartでdeplicated apiを使っていないことがわかります。
+上記の結果から、対象のhelm chartでdeprecated apiを使っていないことがわかります。
 
-* deplicated apiを使っているhelm chartを検証
+* deprecated apiを使っているhelm chartを検証
 
 ```bash
 # template/ingress.yamlを変更
@@ -104,7 +104,7 @@ NAME                        KIND      VERSION                     REPLACEMENT   
 RELEASE-NAME-pluto-sample   Ingress   networking.k8s.io/v1beta1   networking.k8s.io/v1   true      true
 ```
 
-上記の結果から、対象のhelm chartでdeplicated apiが使われていることがわかります。
+上記の結果から、対象のhelm chartでdeprecated apiが使われていることがわかります。
 
 
 ## 実装方法
