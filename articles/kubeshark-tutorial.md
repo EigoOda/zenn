@@ -6,7 +6,7 @@ topics: ["Kubernetes", "Network"]
 published: false
 ---
 
-:::note info
+:::message
 インフォメーション
 本記事は ZOZO Advent Calendar 2022 の7日目の記事です
 :::
@@ -16,16 +16,16 @@ published: false
 環境
 | 環境 | バージョン |
 | --  | --        |
-| kind |      |
-| PC   | macOS |
+| kind | kind v0.17.0 go1.19.2 darwin/arm64 |
+| client PC   | Darwin Kernel Version 21.6.0(M1 macOS) |
+
 
 ## Kubeshark について
 
-KubernetesのAPI trafficを可視化するツールで、Kubernetes内の全てのAPI trafficの可視化と監視する機能が提供されています。
+[Kubeshark](https://github.com/kubeshark/kubeshark)は、KubernetesのAPI trafficを可視化するツールで、Kubernetes内の全てのAPI trafficの可視化と監視する機能が提供されています。
 Chrome Dev Tools、TCPDump、Wiresharkを組み合わせて、Kubernetes用に作り直したものとイメージしていただけるとわかりやすいかもしれません。
 
 
-## 準備
 
 ### kubesharkのインストール
 
@@ -45,7 +45,7 @@ Kubeshark is available at http://localhost:8899
 ```
 
 実行し、少し待つと以下のようにWEBブラウザにkubeconfigのcurrent-contextに設定されたnamespaceのlive trafficが表示されます。
-![kubeshark-image](../images/kubeshark-tutorial/top-image.png)
+![](../images/kubeshark-tutorial/top-image.png)
 
 現在は、Nginx deploymentの[liveness/readiness](https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L45)の通信が発生しているのがわかります。
 
