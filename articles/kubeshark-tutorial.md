@@ -34,6 +34,7 @@ kubesharkのインストールはGitHubの[Download](https://github.com/kubeshar
 ### 実行
 
 以下コマンドを実行し、kubesharkを立ち上げます。
+何もオプションを渡さない場合は、kubeconfigのcurrent-contextに設定されたnamespaceのpodのlive trafficが表示されます。
 
 ```bash
 $ kubeshark tap
@@ -44,7 +45,7 @@ Waiting for Kubeshark Agent to start...
 Kubeshark is available at http://localhost:8899
 ```
 
-実行し、少し待つと以下のようにWEBブラウザにkubeconfigのcurrent-contextに設定されたnamespaceのlive trafficが表示されます。
+実行し、少し待つと以下のような画面がWEBブラウザに表示されます。
 ![](/images/kubeshark-tutorial/top-image.png)
 
 現在は、Nginx deploymentの[liveness/readiness](https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L45)の通信が発生しているのがわかります。
