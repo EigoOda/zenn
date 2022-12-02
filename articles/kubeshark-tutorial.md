@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes用に再発明されたAPIトラフィックビューアであるKubesharkを試してみる"
+title: "KubernetesのAPI traffic viewerであるKubesharkを試してみる"
 emoji: "🥶"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "Network"]
@@ -13,8 +13,9 @@ published: false
 
 本記事では、Kubesharkでどのようなことができるか試してみたいと思います。
 
-環境
-| 環境 | バージョン |
+### ソフトウェアは以下のバージョンを使います
+
+| ソフトウェア | バージョン |
 | --  | --        |
 | kind | kind v0.17.0 go1.19.2 darwin/arm64 |
 | client PC   | Darwin Kernel Version 21.6.0(M1 macOS) |
