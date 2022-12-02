@@ -13,7 +13,7 @@ published: false
 
 本記事では、Kubesharkでどのようなことができるか試してみたいと思います。
 
-### ソフトウェアは以下のバージョンを使います
+### 環境
 
 | ソフトウェア | バージョン |
 | --  | --        |
@@ -30,7 +30,11 @@ Chrome Dev Tools、TCPDump、Wiresharkを組み合わせて、Kubernetes用に�
 
 ### kubesharkのインストール
 
-kubesharkのインストールはGitHubの[Download](https://github.com/kubeshark/kubeshark#download)にかかれている通り、shellscriptを実行します。
+kubesharkのインストールはGitHubの[Download](https://github.com/kubeshark/kubeshark#download)にかかれている通り、shellscriptを実行するのみです。
+
+```bash
+sh <(curl -Ls https://kubeshark.co/install)
+```
 
 ### 実行
 
