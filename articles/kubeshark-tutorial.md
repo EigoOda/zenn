@@ -45,7 +45,7 @@ Kubeshark is available at http://localhost:8899
 ```
 
 実行し、少し待つと以下のようにWEBブラウザにkubeconfigのcurrent-contextに設定されたnamespaceのlive trafficが表示されます。
-![](../images/kubeshark-tutorial/top-image.png)
+![](/images/kubeshark-tutorial/top-image.png)
 
 現在は、Nginx deploymentの[liveness/readiness](https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L45)の通信が発生しているのがわかります。
 
