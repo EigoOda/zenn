@@ -11,7 +11,7 @@ published: false
 本記事は ZOZO Advent Calendar 2022 の7日目の記事です
 :::
 
-本記事では、Kubesharkでどのようなことができるか試してみたいと思います。
+本記事では、[Kubeshark](https://github.com/kubeshark/kubeshark)という、KubernetesのAPI trafficを可視化するツールでどのようなことができるか試してみたいと思います。
 
 ### 環境
 
@@ -97,7 +97,7 @@ live streamingを再開する
 
 
 次に別のPodからNginx Podへの通信を確認してみます。
-curlが実行できるPodをデプロし、そのIPと一番最初にデプロイしたNginx SerivceのIPを取得します。
+curlが実行できるPodをデプロし、そのPodのIPと一番最初にデプロイしたNginx SerivceのIPを取得します。
 
 ```bash
 $ k run test-pod --image ghcr.io/dubs11kt/dubs11kt/debug-container:latest -it --rm -- bash
@@ -114,10 +114,10 @@ nginx        ClusterIP   10.96.96.121   <none>        80/TCP    2d16h
 test-podからリクエストを送るテストをする前にKubeshark側で少し設定をします。
 
 対象Podからのリクエストのみに絞るため、取得したIPを`syntax field`に入力します。そうすることで特定のSource IPからの通信に絞ることができます。
-![](/images/kubeshark-tutorial/sytax-field.png)
+![](/images/kubeshark-tutorial/syntax-field.png)
 
 Destination IPも絞りますが、対象の項目にカーソルを合わせて`+`をクリックしても`syntax field`に追加されます。
-![](/image/kubeshark-tutorial/syntax-field-click.png)
+![](/images/kubeshark-tutorial/syntax-field-click.png)
 
 ではさっそく、以下3つのcurlコマンドをtest-podから実行し、kubesharkでどの様に表示されるか見てみます。
 
