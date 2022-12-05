@@ -82,13 +82,13 @@ Kubeshark is available at http://localhost:8899
 
 画面を見るとNginx deploymentの[liveness/readiness](https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L45)の通信が発生しているのがわかります。
 
-ここで少しTIPsですが、画面の左側に表示されているトラッフィクが流れているところでマウスのカーソルを合わせスクロールするかボタンをクリックすることでliveを一時的に止めることができます。
+画面左側のトラッフィクが流れているところでマウスのカーソルを合わせスクロールするか、添付イメージのボタンをクリックすることでliveを一時的に止めることができます。
 
-### 停止
+live streamingを停止する
 
-![](/images/kubeshark-tutorial/stream-pause.png)
+![](/images/kubeshark-tutorial/stream-paused.png)
 
-### 再開
+live streamingを再開する
 
 ![](/images/kubeshark-tutorial/stream-live.png)
 
