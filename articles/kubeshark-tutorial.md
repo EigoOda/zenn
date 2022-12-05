@@ -83,7 +83,7 @@ Kubeshark is available at http://localhost:8899
 
 画面を見るとNginx deploymentの[liveness/readiness][nginx-health-check]の通信が発生しているのがわかります。
 
-画面左側のトラッフィクが流れているところにマウスのカーソルを合わせスクロールするか、添付イメージのボタンをクリックすることでliveを一時的に止めることができます。
+画面左側のトラッフィクが流れているところにマウスのカーソルを合わせスクロールするか、添付イメージのようにボタンをクリックすることでliveを一時的に止めることができます。
 
 live streamingを停止する
 
@@ -101,36 +101,40 @@ curlが実行できるPodをデプロし、そのIPと一番最初にデプロ�
 $ k run test-pod --image ghcr.io/dubs11kt/dubs11kt/debug-container:latest -it --rm -- bash
 
 # test-podのIPを取得
-$ k get pod -o wide
-NAME                     READY   STATUS    RESTARTS   AGE    IP            NODE          NOMINATED NODE   READINESS GATES
-nginx-5b8f7cbb77-5qkwc   1/1     Running   0          39m    10.244.1.11   kind-worker   <none>           <none>
-test-pod                 1/1     Running   0          108m   10.244.1.7    kind-worker   <none>           <none>
+$ k get pod -owide | grep test-pod
+test-pod                 1/1     Running   0          3h     10.244.1.7    kind-worker   <none>           <none>
 
-$ k get svc
-NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
-kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP   29d
+# nginx serivceのIPを取得
+$ k get svc | grep nginx
 nginx        ClusterIP   10.96.96.121   <none>        80/TCP    2d16h
 ```
 
-対象Podからのリクエストのみに絞るため、取得したIPを`syntax field`に入力します。そうすることで特定のソースIPからの通信に絞ることができます。
+test-podからリクエストを送るテストをする前にKubeshark側で少し設定をします。
+
+対象Podからのリクエストのみに絞るため、取得したIPを`syntax field`に入力します。そうすることで特定のSource IPからの通信に絞ることができます。
 ![](/images/kubeshark-tutorial/sytax-field.png)
 
-表示されているリクエストで絞りたい部分があれば、カーソルを合わせて`+`をクリックしても`syntax field`に追加されます。
+Destination IPも絞りますが、対象の項目にカーソルを合わせて`+`をクリックしても`syntax field`に追加されます。
 ![](/image/kubeshark-tutorial/syntax-field-click.png)
 
-では、以下3つのcurlコマンドをtest-podから実行し、kubesharkでどの様に表示されるか見てみます。
+ではさっそく、以下3つのcurlコマンドをtest-podから実行し、kubesharkでどの様に表示されるか見てみます。
+
 ```bash
 1: curl nginx.default/index.html # liveness
 2: curl nginx.default/50x.html # readiness
 3: curl nginx.default/error.html # There is no file(error.html).
 ```
 
-![](/images/kubeshark-tutorial/curl-results.png)
 想定通り、200と404が返ってきました。
+![](/images/kubeshark-tutorial/curl-results.png)
 
+対象のリクエストをクリックすることで返ってきたリクエストの中身も見ることができます。これは、コマンド3のリクエスト結果です。
+![](/images/kubeshark-tutorial/error-html.png)
 
+kubeshark コマンドを実行するだけでいい感じに通信の可視化ができることがわかりました。
 
-次に`Service Catalog`、`Service Map`、`Traffic Stats`を見たいと思います。
+次に`Service Catalog`、`Service Map`、`Traffic Stats`を見てみたいと思います。
+
 
 ### Service Catalog
 
@@ -138,11 +142,15 @@ nginx        ClusterIP   10.96.96.121   <none>        80/TCP    2d16h
 
 ![](/images/kubeshark-tutorial/service-catalog.png)
 
+
+
 ### Service Map
 
 サービスの繋がりが可視化されているMapが表示されます。
 
 ![](/images/kubeshark-tutorial/service-map.png)
+
+
 
 ### Traffic Stats
 
