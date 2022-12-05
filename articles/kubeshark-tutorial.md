@@ -165,7 +165,7 @@ kubeshark コマンドを実行するだけでいい感じに通信の可視化�
 
 時間ごとのtraffic量やprotocolごとの割合を見ることができます。
 
-![](/images/kubeshark-tutorial)
+![](/images/kubeshark-tutorial/traffic-stats.png)
 
 
 ## 感想
