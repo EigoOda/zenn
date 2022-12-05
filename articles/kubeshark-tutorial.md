@@ -116,7 +116,8 @@ test-podからリクエストを送るテストをする前にKubeshark側で少
 対象Podからのリクエストのみに絞るため、取得したIPを`syntax field`に入力します。そうすることで特定のSource IPからの通信に絞ることができます。
 ![](/images/kubeshark-tutorial/syntax-field.png)
 
-Destination IPも絞りますが、対象の項目にカーソルを合わせて`+`をクリックしても`syntax field`に追加されます。
+Destination IPも別の方法で絞ってみます。
+対象の項目にカーソルを合わせて`+`をクリックしても`syntax field`に追加することが可能です。
 ![](/images/kubeshark-tutorial/syntax-field-click.png)
 
 ではさっそく、以下3つのcurlコマンドをtest-podから実行し、kubesharkでどの様に表示されるか見てみます。
