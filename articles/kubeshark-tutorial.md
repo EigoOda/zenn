@@ -134,7 +134,7 @@ Destination IPも別の方法で絞ってみます。
 対象のリクエストをクリックすることで返ってきたリクエストの中身も見ることができます。これは、コマンド3のリクエスト結果です。
 ![](/images/kubeshark-tutorial/error-html.png)
 
-kubeshark コマンドを実行するだけでいい感じに通信の可視化ができることがわかりました。
+kubeshark コマンドを実行するだけでいい感じに可視化ができることがわかりました。
 
 次に`Service Catalog`、`Service Map`、`Traffic Stats`を見てみたいと思います。
 
@@ -153,19 +153,19 @@ kubeshark コマンドを実行するだけでいい感じに通信の可視化�
 ### Service Map
 
 サービス間の繋がりが可視化されているMapが表示されます。
-ほかのSaaSやOSSなどを使って可視化する場合、エージェントやsidecarを導入しなければなりませんが、Kubesharkの場合は自分たちでなにかをする必要がないのでとても嬉しいです。
+ほかのSaaSやOSSなどを使って可視化する場合、エージェントや関連コンポーネントなどなにかしらの導入をしなければなりませんが、Kubesharkの場合は自分たちでなにかをする必要がないのでとても嬉しいです。
 
 ![](/images/kubeshark-tutorial/service-map.png)
-
-最初開いたときにずっとくるくる回って見づらかったですが、左上の「Refresh」をクリックすると止まりました。
 
 
 
 ### Traffic Stats
 
 時間ごとのtraffic量やprotocolごとの割合を見ることができます。
+少し見づらくなっていますが、12時前後のリクエスト量がほかの時間帯のリクエスト量と比べて多くなっていることがわかります。
 
 ![](/images/kubeshark-tutorial/traffic-stats.png)
+
 
 
 ## 感想
