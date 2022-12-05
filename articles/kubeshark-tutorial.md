@@ -76,13 +76,14 @@ Kubeshark is available at http://localhost:8899
 ```
 
 何もオプションを渡さない場合は、kubeconfigのcurrent-contextに設定されたnamespaceにデプロイされているpodのlive trafficが表示されます。
+`kubeshark tap -A`のように`-A`オプションを渡すと`kubectl`と同じ様に全namespaceが対象となります。
 
 少し待つと以下のような画面がWEBブラウザに表示されます。
 ![](/images/kubeshark-tutorial/top-image.png)
 
-画面を見るとNginx deploymentの[liveness/readiness](https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L45)の通信が発生しているのがわかります。
+画面を見るとNginx deploymentの[liveness/readiness][nginx-health-check]の通信が発生しているのがわかります。
 
-画面左側のトラッフィクが流れているところでマウスのカーソルを合わせスクロールするか、添付イメージのボタンをクリックすることでliveを一時的に止めることができます。
+画面左側のトラッフィクが流れているところにマウスのカーソルを合わせスクロールするか、添付イメージのボタンをクリックすることでliveを一時的に止めることができます。
 
 live streamingを停止する
 
@@ -91,4 +92,76 @@ live streamingを停止する
 live streamingを再開する
 
 ![](/images/kubeshark-tutorial/stream-live.png)
+
+
+次に別のPodからNginx Podへの通信を確認してみます。
+curlが実行できるPodをデプロし、そのIPと一番最初にデプロイしたNginx SerivceのIPを取得します。
+
+```bash
+$ k run test-pod --image ghcr.io/dubs11kt/dubs11kt/debug-container:latest -it --rm -- bash
+
+# test-podのIPを取得
+$ k get pod -o wide
+NAME                     READY   STATUS    RESTARTS   AGE    IP            NODE          NOMINATED NODE   READINESS GATES
+nginx-5b8f7cbb77-5qkwc   1/1     Running   0          39m    10.244.1.11   kind-worker   <none>           <none>
+test-pod                 1/1     Running   0          108m   10.244.1.7    kind-worker   <none>           <none>
+
+$ k get svc
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP   29d
+nginx        ClusterIP   10.96.96.121   <none>        80/TCP    2d16h
+```
+
+対象Podからのリクエストのみに絞るため、取得したIPを`syntax field`に入力します。そうすることで特定のソースIPからの通信に絞ることができます。
+![](/images/kubeshark-tutorial/sytax-field.png)
+
+表示されているリクエストで絞りたい部分があれば、カーソルを合わせて`+`をクリックしても`syntax field`に追加されます。
+![](/image/kubeshark-tutorial/syntax-field-click.png)
+
+では、以下3つのcurlコマンドをtest-podから実行し、kubesharkでどの様に表示されるか見てみます。
+```bash
+1: curl nginx.default/index.html # liveness
+2: curl nginx.default/50x.html # readiness
+3: curl nginx.default/error.html # There is no file(error.html).
+```
+
+![](/images/kubeshark-tutorial/curl-results.png)
+想定通り、200と404が返ってきました。
+
+
+
+次に`Service Catalog`、`Service Map`、`Traffic Stats`を見たいと思います。
+
+### Service Catalog
+
+対象のサービスにどのようなエントリーが存在するか確認することができます。
+
+![](/images/kubeshark-tutorial/service-catalog.png)
+
+### Service Map
+
+サービスの繋がりが可視化されているMapが表示されます。
+
+![](/images/kubeshark-tutorial/service-map.png)
+
+### Traffic Stats
+
+時間ごとのtraffic量やprotocolごとの割合を見ることができます。
+
+![](/images/kubeshark-tutorial)
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Kubeshark]: https://kubeshark.co/
+[nginx-health-check]: https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L52
 
