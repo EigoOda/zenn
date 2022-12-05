@@ -35,19 +35,36 @@ Chrome Dev Tools、TCPDump、Wiresharkを組み合わせて、Kubernetes用に�
 <!-- kubesharkについてすこし説明を入れる -->
 
 
-## 早速
+
+## 準備
+
+### Kubernetes Cluster, Applicationの準備
+
+kindでKubernetes Clusterを構築した後、動作確認用のNginxをデプロイします。
+
+```bash
+$ kind create cluster
+
+$ git clone https://github.com/dubs11kt/kubernetes-manifests.git
+$ cd kubernetes-manifests && helm install nginx helm/nginx
+```
 
 ### kubesharkのインストール
 
-kubesharkのインストールはGitHubの[Download](https://github.com/kubeshark/kubeshark#download)にかかれている通り、shellscriptを実行するのみです。
+kubesharkのインストールはGitHubの[Download](https://github.com/kubeshark/kubeshark#download)にかかれている通り、shellscriptを実行します。
 
 ```bash
 sh <(curl -Ls https://kubeshark.co/install)
+
+$ kubeshark version
+Version: 37.0 (main)
 ```
 
-### 実行
 
-以下コマンドを実行し、kubesharkを立ち上げます。
+
+## 実行
+
+さっそくコマンドを実行し、kubesharkを立ち上げ、先程デプロイしたNginx Podの通信を見てみます。
 
 ```bash
 $ kubeshark tap
@@ -63,5 +80,15 @@ Kubeshark is available at http://localhost:8899
 少し待つと以下のような画面がWEBブラウザに表示されます。
 ![](/images/kubeshark-tutorial/top-image.png)
 
-現在は、Nginx deploymentの[liveness/readiness](https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L45)の通信が発生しているのがわかります。
+画面を見るとNginx deploymentの[liveness/readiness](https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L45)の通信が発生しているのがわかります。
+
+ここで少しTIPsですが、画面の左側に表示されているトラッフィクが流れているところでマウスのカーソルを合わせスクロールするかボタンをクリックすることでliveを一時的に止めることができます。
+
+### 停止
+
+![](/images/kubeshark-tutorial/stream-pause.png)
+
+### 再開
+
+![](/images/kubeshark-tutorial/stream-live.png)
 
