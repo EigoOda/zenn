@@ -11,7 +11,7 @@ published: false
 本記事は ZOZO Advent Calendar 2022 の7日目の記事です
 :::
 
-本記事では、[Kubeshark](https://github.com/kubeshark/kubeshark)という、KubernetesのAPI trafficを可視化するツールでどのようなことができるか試してみたいと思います。
+本記事では、[Kubeshark]という、KubernetesのAPI trafficを可視化するツールでどのようなことができるか試してみたいと思います。
 
 ### 環境
 
@@ -19,6 +19,7 @@ published: false
 
 | ソフトウェア | バージョン |
 | --  | --        |
+| Kubeshark | 37.0 |
 | kind | kind v0.17.0 go1.19.2 darwin/arm64 |
 | client PC   | Darwin Kernel Version 21.6.0(M1 macOS) |
 | Helm | v3.10.2|
@@ -29,16 +30,20 @@ Helm chartは以下を使います
 
 ## Kubeshark について
 
-[Kubeshark](https://github.com/kubeshark/kubeshark)は、KubernetesのAPI trafficを可視化するツールで、Kubernetes内の全てのAPI trafficの可視化と監視する機能が提供されています。
+Kubesharkは、KubernetesのAPI trafficを可視化するツールで、Kubernetes内の全てのAPI trafficの可視化と監視する機能が提供されています。
 Chrome Dev Tools、TCPDump、Wiresharkを組み合わせて、Kubernetes用に作り直したものとイメージしていただけるとわかりやすいかもしれません。
 
-<!-- kubesharkについてすこし説明を入れる -->
+また、API traffic viewerだけでなく、Service Catalog、Service Map、Traffic Statsなどの機能も備わっています。
+
+詳細な部分に関しては、Kubesharkの[Docs]をご確認ください。
+
+早速、どのような事ができるか試したいと思います。
 
 
 
 ## 準備
 
-### Kubernetes Cluster, Applicationの準備
+### Kubernetes Clusterの構築、動作確認用のアプリケーションをデプロイ
 
 kindでKubernetes Clusterを構築した後、動作確認用のNginxをデプロイします。
 
@@ -66,7 +71,7 @@ Version: 37.0 (main)
 
 ### Live traffic streaming
 
-さっそくコマンドを実行し、kubesharkを立ち上げ、先程デプロイしたNginx Podの通信を見てみます。
+さっそくコマンドを実行し、kubesharkを立ち上げ、先程デプロイしたNginx Podのトラフィックを見てみます。
 
 ```bash
 $ kubeshark tap
@@ -83,20 +88,17 @@ Kubeshark is available at http://localhost:8899
 少し待つと以下のような画面がWEBブラウザに表示されます。
 ![](/images/kubeshark-tutorial/top-image.png)
 
-画面を見るとNginx deploymentの[liveness/readiness][nginx-health-check]の通信が発生しているのがわかります。
+画面を見るとNginx deploymentの[liveness/readiness][nginx-health-check]のトラフィックが発生しているのがわかります。
+画面左側のトラフィックが流れているところにマウスのカーソルを合わせスクロールするか、添付イメージのようにボタンをクリックすることでlive streaamingを一時的に止め、流れてきた特定のトラフィックを確認することができます。
 
-画面左側のトラッフィクが流れているところにマウスのカーソルを合わせスクロールするか、添付イメージのようにボタンをクリックすることでliveを一時的に止めることができます。
-
-live streamingを停止する
-
+**live streamingを停止する**
 ![](/images/kubeshark-tutorial/stream-paused.png)
 
-live streamingを再開する
-
+**live streamingを再開する**
 ![](/images/kubeshark-tutorial/stream-live.png)
 
 
-次に別のPodからNginx Podへの通信を確認してみます。
+次にほかのPodからNginx Podへ疎通し、結果を確認してみます。
 curlが実行できるPodをデプロし、そのPodのIPと一番最初にデプロイしたNginx SerivceのIPを取得します。
 
 ```bash
@@ -111,32 +113,33 @@ $ k get svc | grep nginx
 nginx        ClusterIP   10.96.96.121   <none>        80/TCP    2d16h
 ```
 
-test-podからリクエストを送るテストをする前にKubeshark側で少し設定をします。
+このままWEBブラウザで確認してもいいのですが、liveness/readinessで発生するトラフィックとtest-podからのトラフィックが混じってしまって確認しにくいため、test-podからテストする前にKubeshark側で少し設定をします。
 
-対象Podからのリクエストのみに絞るため、取得したIPを`syntax field`に入力します。そうすることで特定のSource IPからの通信に絞ることができます。
+今回は、test-podからのリクエストのみに絞りたいため、先程取得したIPを`syntax field`に入力し、test-podからのトラフィックに絞ります。
 ![](/images/kubeshark-tutorial/syntax-field.png)
 
-Destination IPも別の方法で絞ってみます。
-対象の項目にカーソルを合わせて`+`をクリックしても`syntax field`に追加することが可能です。
+リクエストを受け付けるNginx podのIPも絞ります。
+対象の項目にカーソルを合わせて`+`をクリックし、`syntax field`に追加することも可能です。
 ![](/images/kubeshark-tutorial/syntax-field-click.png)
 
 ではさっそく、以下3つのcurlコマンドをtest-podから実行し、kubesharkでどの様に表示されるか見てみます。
 
 ```bash
-1: curl nginx.default/index.html # liveness
-2: curl nginx.default/50x.html # readiness
-3: curl nginx.default/error.html # There is no file(error.html).
+No.1: curl nginx.default/index.html # liveness
+No.2: curl nginx.default/50x.html # readiness
+No.3: curl nginx.default/error.html # There is no file(error.html).
 ```
 
 想定通り、200と404が返ってきました。
 ![](/images/kubeshark-tutorial/curl-results.png)
 
-対象のリクエストをクリックすることで返ってきたリクエストの中身も見ることができます。これは、コマンド3のリクエスト結果です。
+対象のリクエストをクリックすることで返ってきたリクエストの中身も見ることができます。以下のイメージは、No.3のリクエスト結果です。
 ![](/images/kubeshark-tutorial/error-html.png)
 
 kubeshark コマンドを実行するだけでいい感じに可視化ができることがわかりました。
 
-次に`Service Catalog`、`Service Map`、`Traffic Stats`を見てみたいと思います。
+次にService Catalog、Service Map、Traffic Statsを見てみたいと思います。
+
 
 
 ### Service Catalog
@@ -161,7 +164,7 @@ kubeshark コマンドを実行するだけでいい感じに可視化ができ�
 
 ### Traffic Stats
 
-時間ごとのtraffic量やprotocolごとの割合を見ることができます。
+時間ごとのトラフィック量やprotocolごとの割合を見ることができます。
 少し見づらくなっていますが、12時前後のリクエスト量がほかの時間帯のリクエスト量と比べて多くなっていることがわかります。
 
 ![](/images/kubeshark-tutorial/traffic-stats.png)
@@ -180,4 +183,4 @@ Kubesharkを一通り使ってみた感想です。
 
 [Kubeshark]: https://kubeshark.co/
 [nginx-health-check]: https://github.com/dubs11kt/kubernetes-manifests/blob/zenn/kubeshark-tutorial/helm/nginx/templates/deployment.yaml#L38-L52
-
+[Docs]: https://docs.kubeshark.co/en/introduction
