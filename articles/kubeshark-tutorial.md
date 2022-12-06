@@ -8,7 +8,7 @@ published: false
 
 :::message
 インフォメーション
-本記事は ZOZO Advent Calendar 2022 の7日目の記事です
+本記事は [ZOZO Advent Calendar 2022](https://qiita.com/advent-calendar/2022/zozo) の7日目の記事です
 :::
 
 本記事では、[Kubeshark]という、KubernetesのAPI trafficを可視化するツールでどのようなことができるか試してみたいと思います。
