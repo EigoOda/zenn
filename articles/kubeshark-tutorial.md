@@ -3,7 +3,7 @@ title: "KubernetesのAPI traffic viewerであるKubesharkを試してみる"
 emoji: "🥶"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "Network"]
-published: false
+published: true
 ---
 
 :::message
