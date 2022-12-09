@@ -1,7 +1,6 @@
 name: Review articles
 
-on:
-  pull_request: ['main']
+on: [pull_request]
 
 jobs:
   textlint:
