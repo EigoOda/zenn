@@ -30,15 +30,30 @@ kubectlはデフォルトで`$HOME/.kube/config`に設定された`current-conte
 
 簡単にどのような実装となっているか説明し、その後具体的な設定内容を紹介します。
 
+
+## 前提
+
+- aws cli
+
+
 ## 実装
 
 tmuxのセッションごとにkubeconfigを作成し、ログインシェルの環境変数`KUBECONFIG`を設定します。
+tmuxのセッション環境変数を設定することによって、新しいウィンドウやペインを作成した際、設定が引き継がれるようになっています。
+
 kubectlが参照するconfigを`$HOME/.kube/config`ではなく、作成したconfigを参照することでログインシェルごとに参照するクラスタを固定します。
+また、kubeconfigは/tmpに作成することで、PCリスタート時に削除します。
 
-## 設定内容
 
-functionを`.zshrc`や`.bashrc`などに登録します。
+
+## 設定
+
+以下functionを`.zshrc`や`.bashrc`などに登録します。
+
+:::message alert
+Shell scriptではうまく動かないので注意
 function名やconfigのパスなどは、必要に応じて変更してください。
+:::
 
 ```bash
 # ローカルに登録されているAWSプロファイルを表示
@@ -49,6 +64,7 @@ aws_profiles () {
 
 function up() {
   # /tmpにconfigを保管するディレクトリを作成
+  # TIPS: PCをリスタートした際、削除されるように/tmpに配置
   ! test  -d "/tmp/kubeconfigs" && mkdir /tmp/kubeconfigs
 
   # デフォルトのconfigに戻れるオプションも用意
@@ -62,27 +78,20 @@ function up() {
     && export AWS_PROFILE \
     && export AWS_DEFAULT_PROFILE="${AWS_PROFILE}"
 
-  # Get EKS Cluster cluser_name
+  # AWSアカウント内に存在するEKSクラスタを取得
   cluster_name=$(aws eks list-clusters | jq -r '.clusters[]' | fzf)
 
-  # Create temporary kubeconfig file
-  temp_config=$(mktemp -q /tmp/kubeconfigs/"$cluster_name"-XXXXXXX)
-  aws eks update-kubeconfig --name "$cluster_name" --kubeconfig "$temp_config"
+  # 取得したEKSクラスタのkubeconfigを作成
+  export KUBECONFIG="$(mktemp -q /tmp/kubeconfigs/"$cluster_name"-XXXXXXX)"
+  aws eks update-kubeconfig --name "$cluster_name" --kubeconfig "$KUBECONFIG"
 
-  # Set variable(KUBECONFIG) config
-  export KUBECONFIG="$temp_config"
-
-  # Set tmux session environment
-  tmux setenv KUBECONFIG "$temp_config"
+  # tmuxのセッション環境変数に追加
+  # TIPS: 新しいウィンドウ、ペインを作成しても引き継がれます
+  tmux setenv KUBECONFIG "$KUBECONFIG"
   tmux setenv AWS_PROFILE "$AWS_PROFILE"
   tmux setenv AWS_DEFAULT_PROFILE "$AWS_DEFAULT_PROFILE"
 }
 ```
-
-
-## Appnedix
-- aws cli
-
 
 
 [kubie]: https://github.com/sbstp/kubie
