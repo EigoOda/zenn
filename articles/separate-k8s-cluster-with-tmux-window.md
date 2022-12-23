@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes クラスタを安全に操作する"
+title: "Kubernetesクラスタを安全に操作する"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "tmux", "aws"]
@@ -11,49 +11,52 @@ published: false
 本記事は [ZOZO Advent Calendar 2022](https://qiita.com/advent-calendar/2022/zozo) の23日目の記事です
 :::
 
-本記事では、安全にKubernetesクラスタを操作する方法について説明します。
-ほかにも方法はあるので、その中の1つとして参考にしていただければと思います。
+本記事では、AWS EKSをtmuxで安全に操作する方法について説明します。
+カスタマイズしていただければ、GKE、AKSなどでもご利用いただけるかと思いますし、ほかにも方法はあるのでその中の1つとして参考にしていただければと思います。
+
+
+
+## なぜそうしたのか？
 
 私は、普段の業務で複数のクラスタを1つのターミナルから操作しています。
-同じ様にKubernetesクラスタを管理している多くの方が、複数のクラスタをターミナルから操作しているのではないでしょうか。
+Kubernetesクラスタを管理している多くの方が、同じような状況ではないでしょうか。
 
 そこで問題となるのが、Kubernetesクラスタの切り替えです。
 kubectlはデフォルトで`$HOME/.kube/config`に設定された`current-context`を参照します。
 つまり、クラスタごとにターミナルやタブを分けてもすべてのターミナルが同じconfigを参照するため、ターミナルを分ける意味がなくなってしまいます。
-操作するクラスタが変わるたびにコマンドを実行し切り替える必要があり大変ですし、切り替え忘れて`kubectl delete`をしてしまった場合はもっと大変なことになりそうな予感がします。
+また、操作するクラスタが変わるたびにコマンドを実行し切り替える必要があり大変ですし、切り替え忘れて`kubectl delete`をしてしまった場合はもっと大変なことになりそうな予感がします。
 
 それらを防ぐために今回は、私がどのような方法をとっているか紹介したいと思います。
 
 以下の方向けの記事です
-- AWS EKSを使っている方
 - 普段tmuxを使っていて、セッション、ウィンドウごとにKubernetesクラスタを固定したい
 - プロンプトをカスタマイズしていて、いい感じに[kubie]が使えない
 
+ちなみにプロンプトやコンフィグをデフォルトで利用している方は、[kubie]がおすすめです。
 
 簡単にどのような実装となっているか説明し、その後具体的な設定内容を紹介します。
 
 
-## 前提
-
-- aws cli
-
 
 ## 実装
 
-tmuxのセッションごとにkubeconfigを作成し、ログインシェルの環境変数`KUBECONFIG`を設定します。
-tmuxのセッション環境変数を設定することによって、新しいウィンドウやペインを作成した際、設定が引き継がれるようになっています。
+AWS CLIのconfigからプロファイルをfzfで選択し、選択したプロファイルに存在するEKS一覧から操作したいクラスタを選択します。
 
-kubectlが参照するconfigを`$HOME/.kube/config`ではなく、作成したconfigを参照することでログインシェルごとに参照するクラスタを固定します。
-また、kubeconfigは/tmpに作成することで、PCリスタート時に削除します。
+tmuxのセッションごとに選択したクラスタのkubeconfigを作成し、ログインシェルの環境変数`KUBECOFIG`を設定することで操作するクラスタを固定します。
+また、tmuxのセッション環境変数を設定することによって、新しいウィンドウやペインを作成した際、設定が引き継がれるようになっています。
+
+接続先を切り替えるごとにkubeconfigが生成するため、/tmpに作成することで、PCリスタート時に削除します。
+
+では、どのようになっているか見ていきたいと思います。
 
 
 
 ## 設定
 
-以下functionを`.zshrc`や`.bashrc`などに登録します。
+以下functionを`.zshrc`や`.bashrc`などに登録し、リロードしてください。
 
 :::message alert
-Shell scriptではうまく動かないので注意
+Shell scriptではうまく動かないので注意です。
 function名やconfigのパスなどは、必要に応じて変更してください。
 :::
 
@@ -66,21 +69,21 @@ aws_profiles () {
 
 function up() {
   # /tmpにconfigを保管するディレクトリを作成
-  # TIPS: PCをリスタートした際、削除されるように/tmpに配置
+  # PCをリスタートした際、削除されるように/tmpに配置
   ! test  -d "/tmp/kubeconfigs" && mkdir /tmp/kubeconfigs
 
-  # デフォルトのconfigに戻れるオプションも用意
+  # デフォルトのconfig($HOME/.kube/config)に戻れるオプションも用意
   if [[ $1 == "reset" ]]; then
     export KUBECONFIG="$HOME/.kube/config"
     return 0
   fi
 
-  # AWSアカウントを環境変数に設定
+  # AWSプロファイルを環境変数に設定
   AWS_PROFILE=$(aws_profiles | fzf) \
     && export AWS_PROFILE \
     && export AWS_DEFAULT_PROFILE="${AWS_PROFILE}"
 
-  # AWSアカウント内に存在するEKSクラスタを取得
+  # AWSプロファイル内に存在するEKSクラスタを取得
   cluster_name=$(aws eks list-clusters | jq -r '.clusters[]' | fzf)
 
   # 取得したEKSクラスタのkubeconfigを作成
@@ -88,14 +91,19 @@ function up() {
   aws eks update-kubeconfig --name "$cluster_name" --kubeconfig "$KUBECONFIG"
 
   # tmuxのセッション環境変数に追加
-  # TIPS: 新しいウィンドウ、ペインを作成しても引き継がれます
+  # 新しいウィンドウ、ペインを作成しても引き継がれます
   tmux setenv KUBECONFIG "$KUBECONFIG"
   tmux setenv AWS_PROFILE "$AWS_PROFILE"
   tmux setenv AWS_DEFAULT_PROFILE "$AWS_DEFAULT_PROFILE"
 }
 ```
 
+## 最後に
+
+いかがだったでしょうか？
+ニッチな情報となりましたが、少しでもローカル環境構築の役に立てれればと思います。
 
 [kubie]: https://github.com/sbstp/kubie
 [p10k]: https://github.com/romkatv/powerlevel10k
 [ktx]: https://github.com/vmware-archive/ktx
+
