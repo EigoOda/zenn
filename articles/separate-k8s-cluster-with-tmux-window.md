@@ -3,7 +3,7 @@ title: "Kubernetesクラスタを安全に操作する"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "tmux", "aws"]
-published: false
+published: true
 ---
 
 :::message
@@ -11,7 +11,7 @@ published: false
 本記事は [ZOZO Advent Calendar 2022](https://qiita.com/advent-calendar/2022/zozo) の23日目の記事です
 :::
 
-本記事では、AWS EKSをtmuxで安全に操作する方法について説明します。
+本記事では、tmuxのセッションごとにKubernetesクラスタを固定することでAWS EKSを安全に操作する方法について説明します。
 カスタマイズしていただければ、GKE、AKSなどでもご利用いただけるかと思いますし、ほかにも方法はあるのでその中の1つとして参考にしていただければと思います。
 
 
