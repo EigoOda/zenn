@@ -1,5 +1,5 @@
 ---
-title: "PriorityClassを設定しする必要があるのか？"
+title: "PriorityClassを設定する必要があるのか？"
 emoji: "🙌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes"]
@@ -16,11 +16,11 @@ PriorityClassを設定していない場合や設計を間違えている場合�
 - Nodeのリソース不足によりアプリケーションPodがスケジュールされない
   - Cluster AutoScalerの場合約2分、Karpenterの場合約1分ほどNodeがReadyになるまでに時間がかかるため、その間スケジュールされない
 
-このようなことからすべてのケースに言えないかもしれませんが、私はシステムを正常に稼働させるためには、設定しておいたほうがいいと考えています。
+このようなことからすべてのケースに言えないかもしれませんが、私はシステムを正常に稼働させるために設定しておいたほうがいいと考えています。
 
 ## PriorityClass とは
 
-cluster scopedのオブジェクトで優先度クラス名称や優先度を表す整数値などを定義します。
+cluster scopedのオブジェクトでオブジェクト名と優先度を表す整数値やその他オプションなどを定義します。
 優先度は10億以下の任意の32ビットの整数値を設定することができ、10億より大きい値は重要なシステム用Podのために予約されています。
 例えば、system-cluster-critical, system-node-critical です。以下のように確認することができます。
 
@@ -42,14 +42,13 @@ priorityClassNameが指定されていないPodに設定されるPriorityClass�
 
 どのようなPodに対して設定されるべきのものであるかなどの説明を記述することができます。
 
-
 ### preemptionPolicy
 
-PriorityClassが設定されたPodがプリエンプションを行うかどうかのポリシーで`Never`と`PreemptLowerPrioirty`を設定できます。
+PriorityClassが設定されたPodがプリエンプションを行うかどうかのポリシーで`Never`と`PreemptLowerPrioirty`が設定可能です。
 デフォルトは`PreemptLowerPrioirty`です。
 
 `Never`はスケジューリングのキューにおいて他の優先度の低いPodよりも優先されますが、スケジューリングされているPodをプリエンプトすることはありません。
-`PreemptLowerPrioirty`は名前の通り、優先度の低いPodをプリエンプトするということになります。
+`PreemptLowerPrioirty`は名前の通り、優先度の低いPodをプリエンプトするための設定です。
 
 
 
