@@ -2,7 +2,7 @@
 title: "Nodeのプロビジョニング勝負! -Cluster Autoscaler vs Karpenter-"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Kubernetes", "ClusterAutoscaler", "Karpenter", "provision", "node"]
+topics: ["Kubernetes", "ClusterAutoscaler", "Karpenter", "provision"]
 published: true
 ---
 
