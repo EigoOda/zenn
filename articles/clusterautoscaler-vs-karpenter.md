@@ -83,32 +83,32 @@ spec:
 ### Karpenter
 
 manifest を Apply 後、20:43:11 に Pod が Pending
-![](../images/clusterautoscaler-vs-karpenter/karpenter1.png)
+![](/images/clusterautoscaler-vs-karpenter/karpenter1.png)
 
 25秒後、Node が NotReady で起動
-![](../images/clusterautoscaler-vs-karpenter/karpenter2.png)
+![](/images/clusterautoscaler-vs-karpenter/karpenter2.png)
 
 12秒（合計37秒）後、Node が Ready となり、Pod の STATUS が ContainerCreating に更新
-![](../images/clusterautoscaler-vs-karpenter/karpenter3.png)
+![](/images/clusterautoscaler-vs-karpenter/karpenter3.png)
 
 合計49秒後、Pod が Running となった
-![](../images/clusterautoscaler-vs-karpenter/karpenter4.png)
-![](../images/clusterautoscaler-vs-karpenter/karpenter5.png)
+![](/images/clusterautoscaler-vs-karpenter/karpenter4.png)
+![](/images/clusterautoscaler-vs-karpenter/karpenter5.png)
 
 ### Cluster Autoscaler
 
 manifest を Apply 後、21:44:47 に Pod が Pending
-![](../images/clusterautoscaler-vs-karpenter/ca1.png)
+![](/images/clusterautoscaler-vs-karpenter/ca1.png)
 
 41秒後、Node が NotReady で起動
-![](../images/clusterautoscaler-vs-karpenter/ca2.png)
+![](/images/clusterautoscaler-vs-karpenter/ca2.png)
 
 16秒（合計57秒）後、Node が Ready となり、Pod の STATUS が ContainerCreating に更新
-![](../images/clusterautoscaler-vs-karpenter/ca3.png)
+![](/images/clusterautoscaler-vs-karpenter/ca3.png)
 
 合計1分10秒後、 Pod が Running となった
-![](../images/clusterautoscaler-vs-karpenter/ca4.png)
-![](../images/clusterautoscaler-vs-karpenter/ca5.png)
+![](/images/clusterautoscaler-vs-karpenter/ca4.png)
+![](/images/clusterautoscaler-vs-karpenter/ca5.png)
 
 ## 結果
 
