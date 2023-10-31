@@ -3,7 +3,7 @@ title: "Nodeのプロビジョニング勝負! -Cluster Autoscaler vs Karpenter-
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "ClusterAutoscaler", "Karpenter", "provision", "node"]
-published: false
+published: true
 ---
 
 Kubernetes のノードプロビジョナーは、何を使っていますでしょうか。
@@ -91,7 +91,7 @@ manifest を Apply 後、20:43:11 に Pod が Pending
 12秒（合計37秒）後、Node が Ready となり、Pod の STATUS が ContainerCreating に更新
 ![](/images/clusterautoscaler-vs-karpenter/karpenter3.png)
 
-合計49秒後、Pod が Running となった
+合計49秒後、Pod が Running
 ![](/images/clusterautoscaler-vs-karpenter/karpenter4.png)
 ![](/images/clusterautoscaler-vs-karpenter/karpenter5.png)
 
@@ -106,7 +106,7 @@ manifest を Apply 後、21:44:47 に Pod が Pending
 16秒（合計57秒）後、Node が Ready となり、Pod の STATUS が ContainerCreating に更新
 ![](/images/clusterautoscaler-vs-karpenter/ca3.png)
 
-合計1分10秒後、 Pod が Running となった
+合計1分10秒後、 Pod が Running
 ![](/images/clusterautoscaler-vs-karpenter/ca4.png)
 ![](/images/clusterautoscaler-vs-karpenter/ca5.png)
 
@@ -115,17 +115,17 @@ manifest を Apply 後、21:44:47 に Pod が Pending
 Node のプロビジョニングは、以下の結果となりました。
 - Karpenter: 37秒
 - Cluster Autoscaler:57秒
+
 Karpenter は CA の約2/3ほどの時間で Node をプロビジョニングできることがわかりました。
 
 ## 感想
 
 もう少し差があるのかと思っていましたが、思っていたより差はありませんでした。
 ただ、20秒は結構大きい差だと思うので検証結果次第では CA から Karpenter への乗り換えもありではないでしょうか。
-どちらのプロビジョニングスピードでも急激なトラフィックへの対策は対応しきれないため、とりあえずは引続き手動で Pod 数を増やす必要があります。
-自動でいい感じにやってくれるなにかないかなーと思っています。
+どちらのプロビジョニングスピードでも急激なトラフィックへの対策は対応しきれないため、引続き手動で Pod 数を増やす必要があります。自動でいい感じにやってくれるものはないかなーと思っています。
 
 実際、Karpenter を最初に触ったのが1年以上前（v0.19）で、Node のプロビジョニング以外のところで少し課題感がありプロダクションへの採用は見送りました。
-最近AWSの方から聞いた話では、改善されつつありプロダクションへの採用ができる可能性もありそうだったため、再度検討してみます。
+最近AWSの方から聞いた話では、それらの点が改善されつつあり、プロダクションへの採用ができる可能性もありそうだったため、再度検討してみます。
 
 [Cluster Autoscaler]: https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler
 [Karpenter]: https://karpenter.sh/
