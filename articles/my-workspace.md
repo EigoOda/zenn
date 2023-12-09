@@ -8,15 +8,28 @@ published: false
 
 # 冒頭
 
+- SRE
+
 # 紹介
 
 ## Wezterm
 
+- config
+
 ## Tmux
+
+- config
 
 ## Neovim
 
-# 諦めたもの
+- LazyVIM
 
+## CLI
+
+- バージョン管理に aqua と renovate
+
+# 使っていないもの
+
+- Desktop アプリ
 - VSCode
 
