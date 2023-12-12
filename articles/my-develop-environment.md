@@ -6,27 +6,34 @@ topics: ["Terminal", "Wezterm", "tmux", "Neovim"]
 published: false
 ---
 
-私は普段、SRE として働いています。
-主に AWS, Kubernetes, CI/CD あたりがメインでほぼほぼ yaml を書いていて、複数の AWS アカウント, Kubernetes Cluster, GitHub レポジトリ, etc. を触っています。
+:::message
+インフォメーション
+本記事は [ZOZO Advent Calendar 2023](https://qiita.com/advent-calendar/2023/zozo) の14日目の記事です
+:::
+
+私は普段 SRE として働いています。
+主に AWS、Kubernetes、CI/CD あたりがメインでほぼほぼ yaml を書いていて、複数の AWS アカウント、Kubernetes Cluster、GitHub レポジトリ等を触っています。
 yaml 以外も書きたいなぁ...
 
-開発環境に関しては少しこだわりがありツールの入れ替えが激しかったのですが、最近落ち着いてきたのでどのようなツールを使っていて、どのような使い方をしているのか紹介したいと思います。
+開発環境に関しては少しこだわりがあっていろんなツールを試したりで入れ替えが激しかったのですが、最近落ち着いてきたのでどのようなツールを使っていたり、どのような使い方をしているのか紹介したいと思います。
 
 # 構成
 
-WezTerm + tmux + NeoVim の構成です。
+WezTerm + tmux + NeoVim の構成でコマンドを実行したり、コードや記事を書いたりしています。
 
 基本的に WezTerm(ターミナル)で tmux を起動し、Neovim(エディタ)を使っています。
 
-:image:
+![](/images/my-develop-environment/terminal.png)
 
 VSCode のみや VSCode + ターミナル の構成を何度か試してみましたが、以下の点で諦めました。
-  - NeoVim も使っているので VSCode のキーバインディングが覚えられない（単純に歳かもしれない）
-  - 複数の AWS アカウント, Kubernetes Cluster, GitHub レポジトリを扱う場合、1つのウィンドウ（≒ アプリケーション）に収まらない
+  - NeoVim も使っていて VSCode のキーバインディングがなかなか覚えられない（単純に歳かもしれない）
+  - 複数の AWS アカウント、 Kubernetes Cluster、 GitHub レポジトリを扱う場合、1つのウィンドウ（≒ アプリケーション）に収まらない
   - 極力マウスは使いたくない
-2つ目に関しては、VSCode 機能を知らないだけかもしれないので、1つのウィンドウでいい感じにできるのであればどなたか教えてくださいmm
 
-ターミナルもいろんなものがあると思いますが、1年前くらいの時点でドキュメントが豊富な WezTerm を選びました。lua でコンフィグを書ける点もポイントですね。
+2つ目に関しては、VSCode 機能を知らないだけかもしれないので、1つのウィンドウでいい感じにできるのであればどなたか教えてください。
+
+ターミナルもいろんなものがあると思いますが。1年前くらいの時点でドキュメントが豊富な WezTerm を選びました。lua でコンフィグを書ける点もポイントですね。
+元々は Alacritty を使っていました。当時は日本語入力が微妙だったり、ドキュメントが少なかったりで苦労したので乗り換えました。
 
 # 紹介
 
@@ -80,7 +87,7 @@ tmux a -t main
 数年前までは Vim を使用していましたが、最近は Neovim を使っています。新しい物好きというだけで特に理由はありません。
 ちょっと前までは自力で lua.init を書いていたのですが、設定ファイルに割く時間がなくなってきたのをきっかけに [LazyVim](https://www.lazyvim.org/) を導入しました。一瞬でインストールと設定が完了するので([Installation](https://www.lazyvim.org/installation))、名前の通り lazy な方に最適です。戻すのもそんなに難しくないと思うので、使おうか悩んでいる方はぜひ試してみるといいかもしれません。
 
-移行自体は、パッケージマネージャーに [lazy.nvim](https://www.lazyvim.org/configuration/lazy.nvim)が使われていたり、普段使っているプラグインがデフォルトで入っていたこともあって簡単に移行できました。キーバインディングやデフォルトでインストールされないプラグインを使用している場合は、追加で設定やインストールが必要です。[General Setting](https://www.lazyvim.org/configuration/general) を参考に設定可能です。
+移行自体は、パッケージマネージャーに [lazy.nvim](https://www.lazyvim.org/configuration/lazy.nvim) が使われていたり、普段使っているプラグインがデフォルトで入っていたこともあって簡単に移行できました。キーバインディングやデフォルトでインストールされないプラグインを使用している場合は、追加で設定やインストールが必要です。[General Setting](https://www.lazyvim.org/configuration/general) を参考に設定可能です。
 
 デフォルトのまま使ってもいいのですが、インストールされるプラグインが意外と多いので不要なプラグインは、[disable](https://www.lazyvim.org/configuration/plugins#-disabling-plugins) にしています。
 
@@ -94,11 +101,11 @@ JetBrains Mono や Ubuntu Mono 系が好みで、たまに [iosevka](https://git
 
 ### Color Schema
 
-カラースキーマは、[Nord](https://www.nordtheme.com/) を使っています。
+カラースキーマは、[Nord](https://www.nordtheme.com/) を使っていて、基本的に Nord があるアプリケーションは、Nord を使用しています。
 Gruvbox や [iceberg](https://github.com/cocopon/iceberg.vim) なども使ったりします。
 フォント同様、カラースキーマ探しに数時間使ったりするくらいおすすめなので気になる方はぜひ使ってみてください。
 
-カラースキーマに関しては、（不満が出て）機会があれば自作してみようと思います。
+カラースキーマに関しては、（不満が出て）自作する機会があれば作ってみようと思います。＝＝＝＝
 
 ## CLI
 
@@ -115,10 +122,12 @@ aqua も Renovate も他のツール同様で全く使いこなせている感�
 ## 最後に
 
 ローカルの作業環境について紹介しました。
-あまり詳細なところまでは書けていないので、気になった部分があればコメントいただければと思います。
+気付きとして、基本的にツールを使いこなせていないことがわかり、まだまだ作業効率を挙げられる伸びしろがあるとポジティブに思い込んでいます。
+
+今回、あまり詳細なところまでは書けていないので、気になった部分があればコメントいただければと思います。
 また、他にもこんな便利なツールがあるよ等も教えていただけるととても嬉しいです。
 
 あ、ちなみに本記事は、VSCode で書きました。
 
-Multiplexing: https://wezfurlong.org/wezterm/multiplexing.html
-screen: https://en.wikipedia.org/wiki/GNU_Screen
+[Multiplexing]: https://wezfurlong.org/wezterm/multiplexing.html
+[screen]: https://en.wikipedia.org/wiki/GNU_Screen
