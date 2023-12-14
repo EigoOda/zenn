@@ -3,7 +3,7 @@ title: "俺の開発環境"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Terminal", "Wezterm", "tmux", "Neovim"]
-published: false
+published: true
 ---
 
 :::message
