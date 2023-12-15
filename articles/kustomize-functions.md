@@ -1,9 +1,9 @@
 ---
-title: "Kustomize の良さそうな機能"
+title: "Kustomize の便利な機能"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Terminal", "Wezterm", "tmux", "Neovim"]
-published: false
+published: true
 ---
 
 皆さんは Kubernetes manifests のパッケージ化やテンプレート化に何を使っていますか？
@@ -24,10 +24,10 @@ resources:
   - service-account.yaml
 ```
 
-resources に kustomization.yaml が置かれているディレクトリや GitHub リリースの manifest を指定することで簡単にリモートレポジトリの manifest を利用することができます。
-わざわざローカルレポジトリに manifest を持ってこなくても良かったり、バージョンアップはバージョンを変更するだけなので変更はとても容易です。
+OSS などのリモートレポジトリの manifest をダウンロードせず、resources に kustomization.yaml が置かれているディレクトリや GitHub リリースの manifest を指定することで簡単にリモートレポジトリの manifest を利用することができます。
 
-kustomization.yaml が置かれているディレクトリ を指定する例
+kustomization.yaml が置かれているディレクトリ を指定する例です。
+`ref=`には、Tag を指定します。
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -37,7 +37,8 @@ resources:
   - https://github.com/kubernetes/kube-state-metrics?ref=v2.6.0
 ```
 
-GitHub リリースの manifest を指定する例
+GitHub リリースの manifest を指定する例です。
+`v0.6.2`のところには、リリースのバージョンを指定します。
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -47,17 +48,19 @@ resources:
   - https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.2/components.yaml
 ```
 
+わざわざローカルレポジトリに manifest を持ってこなくても良かったり、バージョンアップはバージョンを変更するだけなので変更自体はとても容易です。
 kustomization.yaml がリモートレポジトリに置かれている場合は前者、Helm Chart から生成された manifest が GitHub リリースに置かれている場合は後者 となる場合が多かった印象です。
 
 ## [ImageTagTransformer](https://kubectl.docs.kubernetes.io/references/kustomize/builtins/#_imagetagtransformer_)
 
+イメージ名やタグ、ダイジェストを変更します。
 リモートレポジトリの manifest を利用していたり、ある特定の image のみ変更したい場合に便利です。
 [patches](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patches/) でも同じことができますが、image だけの変更であれば ImageTagTransformer のほうがコード量が少なくて済みます。
 
 少し前になりますが、Kubernetes が使用するレジストリが k8s.gcr.io から registry.k8s.io に変更となりました。
 リモートレポジトリの manifest には、k8s.gcr.io が使われているけど registry.k8s.io にもイメージがプッシュされている場合を想定します。
 
-image(name) と変更後の image(NewName) を images に定義することで `k8s.gcr.io/metrics-server/metrics-server` を `registry.k8s.io/metrics-server/metrics-server` に置き換えることが可能です。
+image(name) と変更後の image(NewName) を images に定義することで `k8s.gcr.io/metrics-server/metrics-server` を `registry.k8s.io/metrics-server/metrics-server` に置き換え可能です。
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -70,7 +73,7 @@ images:
     NewName: registry.k8s.io/metrics-server/metrics-server
 ```
 
-また、以下のように定義することで`postgres`を`my-registry/my-postgres:v1`に変更することが可能です。
+また、以下のように定義することで`postgres`を`my-registry/my-postgres:v1`に変更することができます。
 
 ```bash
 images:
@@ -82,7 +85,7 @@ images:
 ## [LabelTransformer](https://kubectl.docs.kubernetes.io/references/kustomize/builtins/#_labeltransformer_)
 
 commonLabels に定義した label と selector が全リソースに追加されます。すでに同じ key で定義されている場合、上書きされます。
-commonLbales を変更するし、Deployments やServices などのリソースの selector は、リソースがクラスタに適用された後は変更することができないため、設計時に注意が必要です。
+commonLbales を変更し、Deployments やServices などのリソースの selector は、リソースがクラスタに適用された後は変更することができないため、設計時に注意が必要です。
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
