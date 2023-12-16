@@ -2,7 +2,7 @@
 title: "Kustomize の便利な機能"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Terminal", "Wezterm", "tmux", "Neovim"]
+topics: ["Kubernetes", "Kustomize"]
 published: true
 ---
 
