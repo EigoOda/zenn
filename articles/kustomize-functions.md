@@ -6,6 +6,11 @@ topics: ["Kubernetes", "Kustomize"]
 published: true
 ---
 
+:::message
+インフォメーション
+本記事は [ZOZO Advent Calendar 2023](https://qiita.com/advent-calendar/2023/zozo) の15日目の記事です
+:::
+
 皆さんは Kubernetes manifests のパッケージ化やテンプレート化に何を使っていますか？
 Helm、Kustomize、CUE などあると思いますが、私は普段 Kustomize を使っています。
 ここ最近 Kustomize の改善を行ったりした際に少し調べたので、便利そうだった機能や普段から利用している機能を紹介しようと思います。
