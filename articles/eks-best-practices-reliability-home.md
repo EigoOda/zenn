@@ -3,7 +3,7 @@ title: "【要約】EKS Best Practices Guides - Reliability - Home"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "アプリケーション", "Reliability"]
-published: false
+published: true
 ---
 
 [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/) - [Reliability](https://aws.github.io/aws-eks-best-practices/reliability/docs/) - [Home](https://aws.github.io/aws-eks-best-practices/reliability/docs/) の要約です。
