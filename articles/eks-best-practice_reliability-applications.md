@@ -1,12 +1,12 @@
 ---
-title: "【要約】EKS Best Practice Guides - Reliability - Applications"
+title: "【要約】EKS Best Practice Guides - Reliability(1/2)"
 emoji: "🙌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "アプリケーション", "Reliability"]
 published: false
 ---
 
-[EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/) の [Reliability](https://aws.github.io/aws-eks-best-practices/reliability/docs/) の要約です。
+[EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/) の [Reliability](https://aws.github.io/aws-eks-best-practices/reliability/docs/) 内の [Home]() と [Applications](https://aws.github.io/aws-eks-best-practices/reliability/docs/application/) の要約です。
 誤訳している可能性がありますので、ご注意ください。
 
 # Amazon EKS Best Practices Guide for Reliability
@@ -40,4 +40,81 @@ self-managed node を実行する場合、EKS に最適化された Linux AMI �
 
 ## Applications
 
+### Running highly-available applications
 
+Kubernetesは、宣言的な管理により、アプリケーションを一度セットアップすれば、継続的に現在の状態と望ましい状態を一致させようとします。
+
+#### Singleton Podの実行を避ける
+
+Singleton （パターン）とは、そのクラスのインスタンスが1つしか生成されないことを保証するデザインパターン[1] とのことですが、Kubernetes においては、アプリケーションを単一 Pod で動かしていることと読み替えることができます。
+単一のPodで実行されている場合、そのPodが終了するとアプリケーションは利用できなくなります。そのため、Pod の代わりに Deployment を作成します。Deployment で作成された Pod が失敗したり終了したりすると、Deploymentコ ントローラが新しい Pod を起動して、指定された数の Pod が常に実行されるようになります。
+
+#### 複数のレプリカを実行する
+
+Deployment を使用して複数のレプリカを実行すると、可用性を向上させることができます。Horizontal Pod Autoscaler(HPA) を使用することで、需要に基づいてレプリカを自動的にスケールさせることができます。
+
+### 複数のノードにレプリカをスケジュールする
+
+すべてのレプリカが同じノードで実行されていて、そのノードが利用できなくなった場合、複数のレプリカを実行してもあまり役に立ちません。そのため PodAntiAffinity または、PodTopologySpreadConstraints を使用して、Deployment のレプリカを複数のノードに分散させることを検討してください。
+複数のAZにまたがってレプリカを実行することで、アプリケーションの信頼性をさらに向上させることができます。
+
+### Pod anti-affinity を利用する
+
+以下のマニフェストは、Kubernetesスケジューラに対して、別々のノードや AZ にPodを配置することを**優先（preffered）**するように指示します。別々のノードやAZにスケジュールすることを**必須（required）**としないのは、各AZで Pod が実行されている場合、Pod をスケジュールできなくなってしまうからです。アプリケーションが3つのレプリカだけを必要とする場合は、topologyKey: topology.kubernetes.io/zone にrequiredDuringSchedulingIgnoredDuringExecution を使用すれば、Kubernetes スケジューラは同じ AZ に2つ以上の Pod をスケジュールしません。
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spread-host-az
+  labels:
+    app: web-server
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: web-server
+  template:
+    metadata:
+      labels:
+        app: web-server
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - web-server
+              topologyKey: topology.kubernetes.io/zone
+            weight: 100
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - web-server
+              topologyKey: kubernetes.io/hostname
+            weight: 99
+      containers:
+      - name: web-app
+        image: nginx:1.16-alpine
+```
+
+### Pod topology spread constraints を利用する
+
+
+
+
+
+
+
+
+
+
+
+- [1](https://ja.wikipedia.org/wiki/Singleton_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)
