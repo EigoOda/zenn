@@ -1,5 +1,5 @@
 ---
-title: "【要約】EKS Best Practice Guides - Reliability - Home"
+title: "【要約】EKS Best Practices Guides - Reliability - Home"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "アプリケーション", "Reliability"]
