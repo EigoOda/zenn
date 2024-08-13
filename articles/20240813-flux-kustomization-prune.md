@@ -163,3 +163,14 @@ horizontalpodautoscaler.autoscaling/oddy-test-hpa   Deployment/oddy-test-deploym
 ```
 
 実行結果から PDB が削除されていることが確認できました。便利ですね。
+
+検証用のリソースを整理した際に (2) を削除したところ、(1) のリソースも一緒に削除されていたのでその点は注意が必要です。
+
+```bash
+$ k delete -f gitops_toolkit.yaml
+ocirepository.source.toolkit.fluxcd.io "oddy-test" deleted
+kustomization.kustomize.toolkit.fluxcd.io "oddy-test" deleted
+
+$ k get deployments,service,hpa,pdb -n default -l app=oddy-test
+No resources found in default namespace.
+```
