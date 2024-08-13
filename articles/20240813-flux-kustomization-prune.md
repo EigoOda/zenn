@@ -3,7 +3,7 @@ title: "Flux Kustomization の prune 機能"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "Flux"]
-published: false
+published: true
 ---
 
 Flux の Kustomization で prune 機能を利用してみます。
@@ -14,9 +14,9 @@ Flux Kustomization におけるprune 機能とは、以前に適用されたオ�
 では早速試してみます。
 
 以下利用する Kubernetes manifests です。
-ECR と Kubernetes クラスター間はすでに通信できるようになっている状態を想定しています。
+ECR と Kubernetes クラスター間は認証周りの設定が完了していて、すでに通信できるようになっている状態を想定しています。
 
-作成したり削除したりする リソース
+作成したり削除したりする リソース(1)
 
 ```yaml
 apiVersion: apps/v1
@@ -91,7 +91,7 @@ spec:
       app: oddy-test-deployment
 ```
 
-Flux リソース
+Flux リソース(2)
 
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1beta2
@@ -120,7 +120,7 @@ spec:
   suspend: false
 ```
 
-Deployment リソースなどを作成します。
+(1) を ECR に push 後、(2) を Kubernetes クラスターに作成し、Deployment リソースなどを作成します。
 
 ```bash
 $ k get deployments,service,hpa,pdb -n default -l app=oddy-test
