@@ -27,6 +27,7 @@ Markdown コンテンツを`$GITHUB_STEP_SUMMARY`という環境変数に出力�
 
 Job Summaries の例を何パターンか例を挙げてみます。
 
+
 ### 1. echo コマンドの出力を表示
 
 Job Summaries に `Hello world! 🚀` と表示します。
@@ -43,6 +44,7 @@ jobs:
 
 GitHub Actions サマリーに以下のように表示されます。
 ![](/images/gha-job-summaries/hello-world.png)
+
 
 ### 2. kustomize build の結果を表示
 
@@ -79,3 +81,27 @@ GitHub Actions サマリーに以下のように表示されます。
 
 \`\`\` にdiff を指定することで、kubectl diff などが視覚的に確認しやすくなります。
 ![](/images/gha-job-summaries/kustomize-diff-ci.png)
+
+
+## Markdown 以外で Job Summaries に表示する方法
+
+複雑なことをしたくなった場合に、Markdown のみだとで対応できないケースがあると思います。
+そのような場合は、https://github.com/actions/github-script を使うことで JavaScript を実行できます。
+`core.summary`使うことで渡した内容を Job Summaries に出力することができます。
+
+```yaml
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Job summaries
+        uses: actions/github-script@v7
+          with:
+            script: |
+              await core.summary
+                .addHeading("Hello world! 🚀")
+              .write()
+```
+
+GitHub Actions サマリーに以下のように表示されます。
+![](/images/gha-job-summaries/hello-world-js.png)
