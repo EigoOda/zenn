@@ -9,7 +9,7 @@ published: false
 # はじめに
 
 GitHub Actions の Job Summaries を知ってますか？
-約2年半前の2022年5月9日に発表されたもので、各ジョブで生成された結果をMarkdownで表示できるというものです。
+約2年半前の2022年5月9日に発表され、各ジョブで生成された結果をMarkdownで表示できるというものです。
 - https://github.blog/news-insights/product-news/supercharging-github-actions-with-job-summaries/
 
 例えばテスト結果の集計と表示やレポートの作成、ログに依存しないカスタム出力などができるようになります。
@@ -58,6 +58,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Install kustomize command
         uses: imranismail/setup-kustomize@v2
         with:
@@ -76,5 +77,5 @@ jobs:
 GitHub Actions サマリーに以下のように表示されます。
 ![](/images/gha-job-summaries/kustomize-diff.png)
 
-``` にdiff を指定することで、kubectl diff などが視覚的に確認しやすくなります。
+\`\`\` にdiff を指定することで、kubectl diff などが視覚的に確認しやすくなります。
 ![](/images/gha-job-summaries/kustomize-diff-ci.png)
