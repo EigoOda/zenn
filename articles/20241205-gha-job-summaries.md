@@ -63,8 +63,6 @@ jobs:
 
       - name: Install kustomize command
         uses: imranismail/setup-kustomize@v2
-        with:
-          kustomize-version: "5.3.0"
 
       - name: kubectl diff
         run: |
@@ -87,7 +85,7 @@ GitHub Actions サマリーに以下のように表示されます。
 
 複雑なことをしたくなった場合に、Markdown のみだとで対応できないケースがあると思います。
 そのような場合は、https://github.com/actions/github-script を使うことで JavaScript を実行できます。
-`core.summary`使うことで渡した内容を Job Summaries に出力することができます。
+`core.summary`を使い Job Summaries に出力することができます。
 
 ```yaml
 jobs:
@@ -105,3 +103,12 @@ jobs:
 
 GitHub Actions サマリーに以下のように表示されます。
 ![](/images/gha-job-summaries/hello-world-js.png)
+
+より詳細な情報は、https://github.com/actions/toolkit/blob/main/packages/core/README.md#populating-job-summary をご確認ください。
+
+
+# さいごに
+
+さて GitHub Actions の Job Summaries に表示する方法を見てきましたが、どの方法があなたにとって最適な方法だったでしょうか。
+コマンドの結果を表示するだけで良い場合は、`$GITHUB_STEP_SUMMARY`に出力する。
+それより複雑なことをしたい場合は、github-script を利用するという選択になるのではないかと思います。
