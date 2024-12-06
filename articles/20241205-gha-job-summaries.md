@@ -3,7 +3,7 @@ title: "GitHub Actions の Job Summaries を使って CI の結果を簡単に�
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Github", "CI"]
-published: false
+published: true
 ---
 
 # はじめに
