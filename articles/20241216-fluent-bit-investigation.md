@@ -46,11 +46,13 @@ Event or Record, Filtering, Tag, Timestamp, Match, Structured Message がキー�
 **Event or Record**
 
 Fluent Bit によって取得されたログまたはメトリックに属するすべての受信データはイベントまたはレコードとみなされ、イベントは以下の要素によって構成されます。
+
 - timestamp
 - key/value metadata(v2.1.0 以上)
 - payload
 
 イベントのフォーマットは、`[[TIMESTAMP, METADATA], MESSAGE]`となります。要素の説明は以下の通りです。
+
 - *TIMESTAMP*: integer か float で表されます
 - *METADATA*: イベントメタデータを含んだオブジェクトで空である可能性もあります
 - *MESSAGE*: イベントのボディを含むオブジェクトです
@@ -62,6 +64,7 @@ Fluent Bit によって取得されたログまたはメトリックに属する
 **Filtering**
 
 イベントの変更、追加、削除するプロセスです。以下のようなことができます。
+
 - IPアドレスやメタデータのような特定の情報を追加
 - イベントコンテンツの特定部分の選択
 - 特定のパターンに一致するイベントを削除
@@ -96,4 +99,4 @@ Fluent Bit がデータを処理するとき、レコード・ログが配信さ
 詳細は、 https://docs.fluentbit.io/manual/administration/buffering-and-storage ご確認ください。
 
 
-以上、Fluent Bit の超概要でした。かなり浅くしか紹介できなかったので、より深い情報を求めている方が公式ドキュメントをご確認いただければと思います。
+以上、Fluent Bit の超概要でした。かなり浅くしか紹介できなかったので、より深い情報を求めている方は公式ドキュメントをご確認いただければと思います。
