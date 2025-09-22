@@ -29,7 +29,8 @@ NDC 導入前は、CoreDNS Pod のスケール時に **DNS Lookup Failed** や *
 
 ## アーキテクチャの変化
 
-NDC を導入した際のアーキテクチャ
+NDC を導入した際のアーキテクチャです。
+NDC が各ノードで動作し、kube-dns(CoreDNS) と Client Pod の間に挟まり DNS をキャッシュすることで様々なメリットがあります。
 
 ![ndc-arch](/images/nodelocal-dns-cache/ndc-arch.png)
 
@@ -39,7 +40,6 @@ NDC を導入した際のアーキテクチャ
 ## CoreDNS 障害時における NDC のカバー範囲
 
 CoreDNS の障害時、NDC でカバーできる範囲はありますが、すべてをカバーできません。
-考えられることに関してカバーできるできないを洗い出しました。
 
 ### NDC でカバーできる不具合
 
@@ -55,11 +55,11 @@ CoreDNS の障害時、NDC でカバーできる範囲はありますが、す�
 
 ## アップグレード手法
 
-NDC にはアップグレード時の課題がありました。
+アップグレード時の課題がありました。
 
-バージョンアップなどの際に発生する `Rollout restart` による Pod 再作成時、**DNS timeout**が発生。
-DaemonSet の `GracefulTerminationSeconds` などの調整や[NodeLocal DNSCache の設定](https://cloud.google.com/kubernetes-engine/docs/how-to/nodelocal-dns-cache?hl=ja)を参考に設定しても改善しませんでした。
-ただし、`kubectl drain` による Node 終了ではエラーが発生しないことを確認できました。
+バージョンアップなどで発生する `Rollout restart` による Pod 再作成時、DNS timeoutが発生してしまい、クラスター全体にその影響が発生していました。
+DaemonSet の `GracefulTerminationSeconds` などの調整や[NodeLocal DNSCache の設定](https://cloud.google.com/kubernetes-engine/docs/how-to/nodelocal-dns-cache?hl=ja)を参考に設定してもその状態は改善しませんでした。
+ただし、`kubectl drain` による Node 終了ではエラーが発生しないことは確認できたため、それを軸に手法を検討しました。
 
 そのため、RollingUpdate より時間はかかりますが、安全性を優先し、以下の戦略を採用しました。
 
@@ -68,7 +68,7 @@ DaemonSet の `GracefulTerminationSeconds` などの調整や[NodeLocal DNSCache
 
 詳細な内容についは、TBU で紹介してますので、よろしければ見てみてください。
 
-# 成果
+# 効果
 
 8月上旬に NDC の導入が完了
 
