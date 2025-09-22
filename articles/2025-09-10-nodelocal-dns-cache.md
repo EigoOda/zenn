@@ -3,7 +3,7 @@ title: "Nodelocal DNS Cache の導入と成果"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "DNS", "CoreDNS"]
-published: false
+published: true
 ---
 
 # 概要
@@ -66,7 +66,7 @@ DaemonSet の `GracefulTerminationSeconds` などの調整や[NodeLocal DNSCache
 - UpdateStrategy を `OnDelete` に設定
 - Karpenter の drift 機能で Node を入れ替え
 
-詳細な内容についは、TBU で紹介してますので、よろしければ見てみてください。
+詳細な内容についは、他の記事で紹介しますので、よろしければ見てみてください。（記事を公開したらリンクを張ります）
 
 # 効果
 
