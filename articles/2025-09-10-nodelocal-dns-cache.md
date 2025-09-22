@@ -8,7 +8,7 @@ published: false
 
 # 概要
 
-本記事では、**NodeLocal DNS Cache (NDC)** を導入した際の目的や成果を整理します。
+本記事では、[NodeLocal DNS Cache (NDC)](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/dns/nodelocaldns) を導入した際の目的や成果を整理します。
 システムの規模感や特徴によって原因や対処方法が異なりますので、その点ご了承ください。
 
 # 導入の目的
@@ -92,7 +92,6 @@ DaemonSet の `GracefulTerminationSeconds` などの調整や[NodeLocal DNSCache
 # Appendix
 
 本番導入前の検証でレイテンシ改善を確認できたのですが、本番環境では大きな改善は見られませんでした。
-
 
 ## まとめ
 
