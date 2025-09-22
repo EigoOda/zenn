@@ -66,7 +66,7 @@ DaemonSet の `GracefulTerminationSeconds` などの調整や[NodeLocal DNSCache
 - UpdateStrategy を `OnDelete` に設定
 - Karpenter の drift 機能で Node を入れ替え
 
-詳細な内容についは、他の記事で紹介しますので、よろしければ見てみてください。（記事を公開したらリンクを張ります）
+詳細な内容についは、https://zenn.dev/johnn26/articles/2025-09-22-nodelocal-dns-cache-update で紹介しましたので、よろしければ見てみてください。
 
 # 効果
 
