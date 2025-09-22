@@ -14,7 +14,7 @@ published: false
 # 導入の目的
 
 NDC 導入前は、CoreDNS Pod のスケール時に **DNS Lookup Failed** や **i/o timeout**が発生していました。
-一時的な対応として `ndot = 1` を設定し改善は見られましたが、完全に解消することはできませんでした。
+一時的な対応として `ndot = 1` を設定し改善は見られましたが、完全に解消できませんでした。
 
 そのため、**NDC を導入することで DNS Lookup Failed をほぼゼロにすること**を目的としました。
 また、その他のメリットとして、以下のことが考えられます。
@@ -22,7 +22,7 @@ NDC 導入前は、CoreDNS Pod のスケール時に **DNS Lookup Failed** や *
 - CoreDNS 依存度が低下
 - CoreDNS 障害時にも各サービスへの影響を最小化可能
 
-# Nodelocal DNS Cache とは？
+# Nodelocal DNS Cache とは
 
 クラスターノード上で DaemonSet として DNS キャッシュエージェントを実行することにより、DNSパフォーマンスの向上を目的として作成された OSS。
 パフォーマンス向上やキャッシュ統計、その他のメトリクスを可視化する機能の追加を実現できる。
@@ -80,7 +80,7 @@ DaemonSet の `GracefulTerminationSeconds` などの調整や[NodeLocal DNSCache
 
 ## i/o timeout の減少
 
-また別のサービスでは、i/o timeout 数を以下のように削減することができました。
+また別のサービスでは、i/o timeout 数を以下のように削減できました。
 
 - エンドポイントA
   - 7月：176件 → 8月：95件
