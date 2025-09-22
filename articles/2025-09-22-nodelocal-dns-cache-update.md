@@ -3,7 +3,7 @@ title: "Nodelocal DNS Cache のアップデート戦略"
 emoji: ""
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Kubernetes", "DNS", "CoreDNS"]
-published: false
+published: true
 ---
 
 # 概要
